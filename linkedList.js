@@ -1,6 +1,6 @@
 class Node {
-    constructor(value){
-        this.head = value;
+    constructor(value = null){
+        this.value = value;
         this.next = null;
     }
 }
@@ -8,6 +8,7 @@ class Node {
 class LinkedList{
     constructor(){
         this.head = null;
+        this.tail = null;
         this.length = 0;
     }
 
@@ -18,12 +19,15 @@ class LinkedList{
     }
 
     size(){
+        return this.length;
     }
 
     head(){
+        return this.head;
     }
 
     tail(){
+        return this.tail;
     }
 
     at(index){
