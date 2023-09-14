@@ -14,32 +14,39 @@ class LinkedList{
     }
 
     append(value){
+        const newNode = new Node(value);
 
         // If the list is empty, create new node and refer the head and tail to it
         if(!this.tail){
-            const newNode = new Node(value);
-
-            this.head = newNode;
-            this.tail = newNode;
-            
-            this.length ++;
-
+            this.head = this.tail = newNode;
         } else{
 
-            // IF the list is not empty, create new node. Set new node as last node
-            const storedNode = this.tail;
-            const newNode = new Node(value);
-
-            storedNode.next = newNode;
-            newNode.prev = storedNode;
+            // If the list is not empty, create new node. Set new node as tail node
+            this.tail.next = newNode;
+            newNode.prev = this.tail;
             newNode.next = null;
-
             this.tail = newNode;
-            this.length ++;
         }
+
+        this.length ++;
+
     }
 
     prepend(value){
+        const newNode = new Node(value);
+
+        // If the list is empty, create new node and refer the head and tail to it
+        if(!this.tail){
+            this.head = this.tail = newNode;
+        } else{
+
+            // If the list is not empty, create new node. Set new node as head node
+            this.head.prev = newNode;
+            newNode.next = this.head;
+            this.head = newNode;
+        }
+
+        this.length ++;
     }
 
     size(){
@@ -54,8 +61,30 @@ class LinkedList{
         return this.tail;
     }
 
-    at(index){
+    at(index) {
+
+        // Check for valid index
+        if (index < 0 || index >= this.length) {
+            console.log('Not a valid index');
+            return null;
+        }
+    
+        let i = 0;
+        let current = this.head;
+    
+        // Return the value of the node at index
+        while (i < this.length) {
+            if (i === index) {
+                return current.value; 
+            }
+    
+            current = current.next;
+            i++;
+        }
+    
+        return null;
     }
+    
 
     pop(){
 
@@ -70,25 +99,52 @@ class LinkedList{
             return;
         }
       
-        // If there are more than one nodes in the list, remove the 'next' reference 
-        // and set the previous node as 'tail
-        let newTail = this.tail.prev
+        // If there are more than one nodes in the list, remove the 'next' reference of the tail node
+        // and set the previous node as new tail
+        let newTail = this.tail.prev;
         newTail.next = null;
+
         this.tail = newTail;
         this.length--;
     }
 
     contains(value){
+
+        let i = 0;
+        let current = this.head;
+
+        while(i < this.length){
+            if(current.value === value){
+                return true;
+            }
+            current = current.next;
+            i++;
+        }
+
+        return false;
     }
 
     find(value){
+
+        let i = 0;
+        let current = this.head;
+
+        while(i < this.length){
+            if(current.value === value){
+                return i;
+            }
+            current = current.next;
+            i++;
+        }
+
+        return null;
     }
 
     toString(){
         let current = this.head;
 
         // If there is a 'head' node, print the value and do the same for the next node
-        // until there are no more node left
+        // until there are no more nodes left
         while(current !== null){
             console.log(current.value);
             current = current.next;
@@ -96,24 +152,75 @@ class LinkedList{
     }
 
     insertAt(value, index){
+    
+        let i = 0;
+        let current = this.head;
+        let newNode = new Node(value);
+    
+        if(index < 0 || index > this.length) return console.log("Not a valid index");
+
+        // If index is the first item in the list, add new node at the beginning
+        if(index === 0){
+            this.prepend(value);
+            return;
+        }
+
+        // If index is the last item in the list, add new node at the end
+        if(index === this.length){
+            this.append(value);
+            return;
+        }
+
+        // If index is between the first and last item, iterate through entire list
+        while(i < this.length){
+            
+            // If index is found, add new node and set new references
+            if(i === index){
+                newNode.prev = current.prev;
+                current.prev.next = newNode;
+                current.prev = newNode;
+                newNode.next = current;
+            }
+
+            current = current.next;
+            i++;
+        }
     }
 
     removeAt(index){
-    }
 
+        let i = 0;
+        let current = this.head;
+
+        if(index < 0 || index > this.length) return console.log("Not a valid index");
+
+        // If index is the first item in the list, set new references
+        if(index === 0){
+            this.head.next.prev = null;
+            this.head = this.head.next;
+            this.length--;
+            return;
+        }
+
+        // If index is the last item in the list, set new references
+        if(index === this.length){
+            this.tail.prev.next = null;
+            this.tail = this.tail.prev;
+            this.length--;
+            return;
+        }
+
+        // If index is between the first and last item, set new references
+        while(i < this.length){
+            if(i === index){
+                current.prev.next = current.next;
+                current.next.prev = current.prev;
+            }
+
+            current = current.next;
+            i++;
+        }
+    }
 }
 
-const newList = new LinkedList();
 
-newList.append(10);
-newList.append(20);
-newList.append(30);
-newList.append(40);
-
-console.log(`length: ${newList.length}, list:`);
-newList.toString();
-
-newList.pop();
-console.log(`length: ${newList.length}, new list:`);
-
-newList.toString();
