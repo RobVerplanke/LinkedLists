@@ -141,12 +141,14 @@ class LinkedList{
 
     toString(){
         let current = this.head;
+        let string = "";
 
         // If there is a 'head' node, print the value and do the same for each next node
         while(current !== null){
-            console.log(current.value);
+            string += `(${current.value}) -> `;
             current = current.next;
         }
+        return console.log(`${string}null`);
     }
 
     insertAt(value, index){
@@ -223,4 +225,12 @@ class LinkedList{
     }
 }
 
+const newList = new LinkedList();
 
+newList.append(10);
+newList.append(20);
+newList.append(30);
+newList.append(40);
+newList.append(50);
+
+newList.toString();
