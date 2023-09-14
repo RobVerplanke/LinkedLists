@@ -16,12 +16,12 @@ class LinkedList{
     append(value){
         const newNode = new Node(value);
 
-        // If the list is empty, create new node and refer the head and tail to it
+        // If the list is empty, create a new node and refer the list head and tail to it
         if(!this.tail){
             this.head = this.tail = newNode;
         } else{
 
-            // If the list is not empty, create new node. Set new node as tail node
+            // If the list is not empty, create new node and set new node as tail node
             this.tail.next = newNode;
             newNode.prev = this.tail;
             newNode.next = null;
@@ -29,18 +29,17 @@ class LinkedList{
         }
 
         this.length ++;
-
     }
 
     prepend(value){
         const newNode = new Node(value);
 
-        // If the list is empty, create new node and refer the head and tail to it
+        // If the list is empty, create a new node and refer the head and tail to it
         if(!this.tail){
             this.head = this.tail = newNode;
         } else{
 
-            // If the list is not empty, create new node. Set new node as head node
+            // If the list is not empty, create a new node and set new node as head node
             this.head.prev = newNode;
             newNode.next = this.head;
             this.head = newNode;
@@ -99,7 +98,7 @@ class LinkedList{
             return;
         }
       
-        // If there are more than one nodes in the list, remove the 'next' reference of the tail node
+        // If there are more nodes in the list, remove the 'next' reference of the tail node
         // and set the previous node as new tail
         let newTail = this.tail.prev;
         newTail.next = null;
@@ -143,8 +142,7 @@ class LinkedList{
     toString(){
         let current = this.head;
 
-        // If there is a 'head' node, print the value and do the same for the next node
-        // until there are no more nodes left
+        // If there is a 'head' node, print the value and do the same for each next node
         while(current !== null){
             console.log(current.value);
             current = current.next;
@@ -159,27 +157,28 @@ class LinkedList{
     
         if(index < 0 || index > this.length) return console.log("Not a valid index");
 
-        // If index is the first item in the list, add new node at the beginning
+        // If index is the first node in the list, add new node at the beginning
         if(index === 0){
             this.prepend(value);
             return;
         }
 
-        // If index is the last item in the list, add new node at the end
+        // If index is the last node in the list, add new node at the end
         if(index === this.length){
             this.append(value);
             return;
         }
 
-        // If index is between the first and last item, iterate through entire list
+        // If index is between the first and last node, iterate through entire list
         while(i < this.length){
             
-            // If index is found, add new node and set new references
+            // If index is found, set references of the new node and surrounding nodes
             if(i === index){
                 newNode.prev = current.prev;
                 current.prev.next = newNode;
                 current.prev = newNode;
                 newNode.next = current;
+                this.length++;
             }
 
             current = current.next;
@@ -194,7 +193,7 @@ class LinkedList{
 
         if(index < 0 || index > this.length) return console.log("Not a valid index");
 
-        // If index is the first item in the list, set new references
+        // If index is the first node in the list, set new references
         if(index === 0){
             this.head.next.prev = null;
             this.head = this.head.next;
@@ -202,7 +201,7 @@ class LinkedList{
             return;
         }
 
-        // If index is the last item in the list, set new references
+        // If index is the last node in the list, set new references
         if(index === this.length){
             this.tail.prev.next = null;
             this.tail = this.tail.prev;
@@ -210,11 +209,12 @@ class LinkedList{
             return;
         }
 
-        // If index is between the first and last item, set new references
+        // If index is between the first and last node, set new references
         while(i < this.length){
             if(i === index){
                 current.prev.next = current.next;
                 current.next.prev = current.prev;
+                this.length--;
             }
 
             current = current.next;
